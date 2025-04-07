@@ -1,23 +1,9 @@
-<!--<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parabens Ticii</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    
-
-
-</body>
-</html> -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parabéns!</title>
+  <title>Parabéns Tici!</title>
   <style>
     body {
       margin: 0;
@@ -26,36 +12,136 @@
       background-size: cover;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
       height: 100vh;
       color: #333;
     }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .scratch-container {
+      position: relative;
+      width: 300px;
+      height: 360px;
+      margin-bottom: 30px;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .caption {
+      background: white;
+      padding: 10px;
+      font-size: 1rem;
+      text-align: center;
+      border: 5px solid white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      width: 100%;
+    }
+
     .card {
       background: rgba(255, 255, 255, 0.9);
       padding: 40px;
       border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
       text-align: center;
       max-width: 400px;
     }
+
     .card h1 {
       font-size: 2.5em;
       color: #e91e63;
       margin-bottom: 10px;
     }
+
     .card p {
       font-size: 1.2em;
     }
   </style>
-  
 </head>
 <body>
-  <div class="confetti"></div>
-  <div class="card">
-    <h1>Parabéns, João!</h1>
-    <p>Você merece todo o reconhecimento do mundo! 🎉<br />
-    Continue brilhando e inspirando a todos ao seu redor.</p>
+  <div class="container">
+
+    <!-- Raspadinha -->
+    <div class="scratch-container">
+      <img id="reveal-image" src="tici_polaroid.jpg" width="300" height="360" />
+      <canvas id="scratch-canvas" width="300" height="360"></canvas>
+      <div class="caption">Passa a porra do teu dedo kdela😘</div>
+    </div>
+
+    <!-- Cartão de mensagem -->
+    <div class="card">
+      <h1>Parabéns, Ticiane!</h1>
+      <p>Hoje é o seu dia, e eu não poderia deixar de te desejar toda a felicidade do mundo para ti.
+        Que essa nova fase venha repleta de conquistas, sorrisos e momentos bons inesquecíveis. <br><br>
+        Sou muito grato(a) por ter você como minha amiga, e espero de coração que a nossa amizade continue firme,
+        verdadeira e que só cresça com o tempo.</p>
+      <p>Feliz Aniversário, aproveita teu dia! </p>
+    </div>
   </div>
+
+  <!-- Script raspadinha -->
+  <script>
+    const canvas = document.getElementById('scratch-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const width = canvas.width;
+    const height = canvas.height;
+
+    // Cobrir o canvas com uma camada cinza
+    ctx.fillStyle = '#ccc';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.globalCompositeOperation = 'destination-out';
+
+    let isDrawing = false;
+
+    function draw(x, y) {
+      ctx.beginPath();
+      ctx.arc(x, y, 20, 0, Math.PI * 2, false);
+      ctx.fill();
+    }
+
+    function getPosition(e) {
+      let rect = canvas.getBoundingClientRect();
+      let x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      let y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+      return { x, y };
+    }
+
+    function startDraw(e) {
+      isDrawing = true;
+      const pos = getPosition(e);
+      draw(pos.x, pos.y);
+    }
+
+    function endDraw() {
+      isDrawing = false;
+    }
+
+    function drawing(e) {
+      if (!isDrawing) return;
+      e.preventDefault(); // evitar rolagem no celular
+      const pos = getPosition(e);
+      draw(pos.x, pos.y);
+    }
+
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mouseup', endDraw);
+    canvas.addEventListener('mousemove', drawing);
+
+    canvas.addEventListener('touchstart', startDraw);
+    canvas.addEventListener('touchend', endDraw);
+    canvas.addEventListener('touchmove', drawing);
+  </script>
 </body>
 </html>
